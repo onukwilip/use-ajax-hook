@@ -16,7 +16,9 @@
     "hook",
     "react-dom",
     "http",
-    "axios"
+    "axios",
+    "useAjaxRequest",
+    "use-ajax-request"
   ],
   "author": "Prince C. Onukwili",
   "license": "MIT",
