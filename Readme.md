@@ -134,7 +134,7 @@ return (
         <p>Loading...</p>
       ) : error ? (
         <p>There was an error</p>
-      ) : data?.results?.length < 1 ? (
+      ) : !data ? (
         <p>No movies available</p>
       ) : (
         data?.results?.map((eachMovie) => (
@@ -232,4 +232,32 @@ function App() {
 export default App;
 ```
 
+**N.B:** We can also add onSuccess or onError functions, which will be called if we recieve a successfull response or we recieve an error respectively. E.g:
+
+```javascript
+const onSuccess = () => {
+  // ...perform something
+};
+const onError = () => {
+  // ...perform something
+};
+
+useEffect(() => {
+  sendRequest(onSuccess, onError);
+}, [sendRequest]);
+```
+
+In order to pass a parameter to the respective functions we just need to add the `.bind()` function to them:
+
+```javascript
+useEffect(() => {
+  sendRequest(
+    onSuccess.bind(null, parameter1, parameter2),
+    onError.bind(null, parameter1, parameter2)
+  );
+}, [sendRequest]);
+```
+
 More features will be added to it in the future. Thank you.
+Please if you like it star the github repo or fork it. Thanks
+[useAjaxRequest Repo](https://github.com/onukwilip/use-ajax-hook.git)
