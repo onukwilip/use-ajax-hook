@@ -8,7 +8,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
   const config = useMemo(() => options, []);
 
   const sendRequest = useCallback(
-    async ({ onSuccess, onError }) => {
+    async (onSuccess, onError) => {
       setLoading(true);
       setError(false);
 
