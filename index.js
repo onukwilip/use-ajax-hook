@@ -5,7 +5,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const configOptions = useMemo(options);
+  const config = useMemo(options);
 
   const sendRequest = useCallback(
     async ({ onSuccess, onError }) => {
@@ -13,9 +13,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
       setError(false);
 
       let response;
-      const config = {
-        ...configOptions,
-      };
+
       const catchError = (e) => {
         setError(e);
         setLoading(false);
@@ -36,7 +34,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
         if (typeof onSuccess === "function") onSuccess();
       }
     },
-    [instance, url, headers, body, withCredentials, otherProps]
+    [instance, options]
   );
 
   return {
