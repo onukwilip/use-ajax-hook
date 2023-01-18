@@ -1,7 +1,7 @@
 const { default: axios } = require("axios");
 const { useState, useCallback, useMemo } = require("react");
 
-const useAjaxHook = (instance, options = {}) => {
+const useAjaxHook = ({ instance, options = {} }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
