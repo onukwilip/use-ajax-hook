@@ -1,16 +1,11 @@
 const { default: axios } = require("axios");
 const { useState, useCallback, useMemo } = require("react");
 
-const useAjaxHook = (options = {}) => {
+const useAjaxHook = (instance, options = {}) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const { instance, url, headers, body, withCredentials, otherProps } =
-    useMemo(options);
-
-  let other = {};
-
-  if (typeof otherProps === "object") other = { ...otherProps };
+  const configOptions = useMemo(options);
 
   const sendRequest = useCallback(
     async ({ onSuccess, onError }) => {
@@ -19,11 +14,7 @@ const useAjaxHook = (options = {}) => {
 
       let response;
       const config = {
-        url,
-        headers,
-        data: body ? body : null,
-        withCredentials,
-        ...other,
+        ...configOptions,
       };
       const catchError = (e) => {
         setError(e);
@@ -32,7 +23,7 @@ const useAjaxHook = (options = {}) => {
         if (typeof onError === "function") onError();
       };
 
-      if (instance) {
+      if (typeof instance === "function") {
         response = await instance(config).catch(catchError);
       } else {
         response = await axios(config).catch(catchError);

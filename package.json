@@ -1,6 +1,6 @@
 {
   "name": "use-ajax-hook",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A react hook used to manage ajax requests and responses",
   "main": "index.js",
   "scripts": {
