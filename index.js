@@ -5,7 +5,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const config = useMemo(options);
+  const config = useMemo(() => options, []);
 
   const sendRequest = useCallback(
     async ({ onSuccess, onError }) => {
