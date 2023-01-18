@@ -5,7 +5,8 @@ const useAjaxHook = ({ instance, options = {} }) => {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);
-  const config = useMemo(() => options, []);
+  const config = useMemo(() => options, [options]);
+  const depInstance = useMemo(() => instance, [instance]);
 
   const sendRequest = useCallback(
     async (onSuccess, onError) => {
@@ -24,7 +25,6 @@ const useAjaxHook = ({ instance, options = {} }) => {
       if (typeof instance === "function") {
         response = await instance(config).catch(catchError);
       } else {
-        // response = await axios(config).catch(catchError);
         throw new Error("Expected instance to be a function, but it's not");
       }
 
@@ -35,7 +35,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
         if (typeof onSuccess === "function") onSuccess();
       }
     },
-    [instance, options]
+    [depInstance, config]
   );
 
   return {
