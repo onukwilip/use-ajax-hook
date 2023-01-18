@@ -24,7 +24,8 @@ const useAjaxHook = ({ instance, options = {} }) => {
       if (typeof instance === "function") {
         response = await instance(config).catch(catchError);
       } else {
-        response = await axios(config).catch(catchError);
+        // response = await axios(config).catch(catchError);
+        throw new Error("Expected instance to be a function, but it's not");
       }
 
       if (response) {
