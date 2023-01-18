@@ -8,38 +8,45 @@ const useAjaxHook = (options = {}) => {
   const { instance, url, headers, body, withCredentials, otherProps } =
     useMemo(options);
 
-  const sendRequest = useCallback(async ({ onSuccess, onError }) => {
-    setLoading(true);
-    setError(false);
+  let other = {};
 
-    let response;
-    const config = {
-      url,
-      headers,
-      data: body ? body : null,
-      withCredentials,
-      ...otherProps,
-    };
-    const catchError = (e) => {
-      setError(e);
-      setLoading(false);
-      setData(null);
-      if (typeof onError === "function") onError();
-    };
+  if (typeof otherProps === "object") other = { ...otherProps };
 
-    if (instance) {
-      response = await instance(config).catch(catchError);
-    } else {
-      response = await axios(config).catch(catchError);
-    }
-
-    if (response) {
-      setLoading(false);
+  const sendRequest = useCallback(
+    async ({ onSuccess, onError }) => {
+      setLoading(true);
       setError(false);
-      setData(response?.data);
-      if (typeof onSuccess === "function") onSuccess();
-    }
-  }, []);
+
+      let response;
+      const config = {
+        url,
+        headers,
+        data: body ? body : null,
+        withCredentials,
+        ...other,
+      };
+      const catchError = (e) => {
+        setError(e);
+        setLoading(false);
+        setData(null);
+        if (typeof onError === "function") onError();
+      };
+
+      if (instance) {
+        response = await instance(config).catch(catchError);
+      } else {
+        response = await axios(config).catch(catchError);
+      }
+
+      if (response) {
+        setLoading(false);
+        setError(false);
+        setData(response?.data);
+        if (typeof onSuccess === "function") onSuccess();
+      }
+    },
+    [instance, url, headers, body, withCredentials, otherProps]
+  );
 
   return {
     data,
