@@ -19,7 +19,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
         setError(e);
         setLoading(false);
         setData(null);
-        if (typeof onError === "function") onError();
+        if (typeof onError === "function") onError(e);
       };
 
       if (typeof instance === "function") {
@@ -32,7 +32,7 @@ const useAjaxHook = ({ instance, options = {} }) => {
         setLoading(false);
         setError(false);
         setData(response?.data);
-        if (typeof onSuccess === "function") onSuccess();
+        if (typeof onSuccess === "function") onSuccess(response);
       }
     },
     [depInstance, config]
