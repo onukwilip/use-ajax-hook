@@ -46,4 +46,4 @@ const useAjaxHook = ({ instance, options = {} }) => {
   };
 };
 
-export default useAjaxHook;
+module.exports = useAjaxHook;
