@@ -34,6 +34,8 @@ const useAjaxHook = ({ instance, options = {} }) => {
         setData(response?.data);
         if (typeof onSuccess === "function") onSuccess(response);
       }
+
+      return response;
     },
     [depInstance, config]
   );
