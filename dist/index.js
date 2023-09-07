@@ -10,7 +10,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = require("react");
-const useAjaxHook = ({ instance, options = {}, }) => {
+const useAjaxRequest = ({ instance, options = {}, }) => {
     const [data, setData] = (0, react_1.useState)(null);
     const [loading, setLoading] = (0, react_1.useState)(false);
     const [error, setError] = (0, react_1.useState)(false);
@@ -49,4 +49,4 @@ const useAjaxHook = ({ instance, options = {}, }) => {
         sendRequest,
     };
 };
-module.exports = useAjaxHook;
+exports.default = useAjaxRequest;
