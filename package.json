@@ -1,8 +1,8 @@
 {
   "name": "use-ajax-request",
   "version": "1.2.9",
-  "description": "A react hook used to manage ajax requests and responses",
-  "main": "index.js",
+  "description": "A react hook used to manage http requests and responses in React Js applications",
+  "main": "./dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -26,10 +26,14 @@
     "url": "https://github.com/onukwilip/use-ajax-hook/issues"
   },
   "homepage": "https://github.com/onukwilip/use-ajax-hook#readme",
-  "dependencies": {},
   "peerDependencies": {
     "axios": "^1.2.3",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.5.9",
+    "@types/react": "^18.2.21",
+    "typescript": "^5.2.2"
   }
 }
