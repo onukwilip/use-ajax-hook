@@ -16,7 +16,7 @@ const useAjaxRequest = <T>({
 
   const sendRequest = useCallback(
     async (
-      onSuccess?: (response: AxiosResponse<any, any>) => void,
+      onSuccess?: (response: AxiosResponse<T, any>) => void,
       onError?: (error: { response: { data: any } }) => void
     ) => {
       setLoading(true);
