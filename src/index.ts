@@ -1,11 +1,11 @@
-import axios from "axios";
+import axios, { AxiosResponse, AxiosStatic } from "axios";
 import { useState, useCallback, useMemo } from "react";
 
 const useAjaxRequest = <T>({
   instance,
   options = {},
 }: {
-  instance: Function;
+  instance: AxiosStatic;
   options: { url: string; method: string; data?: any; [key: string]: any } | {};
 }) => {
   const [data, setData] = useState<T | null>(null);
@@ -16,13 +16,13 @@ const useAjaxRequest = <T>({
 
   const sendRequest = useCallback(
     async (
-      onSuccess?: (response: { data: T }) => void,
+      onSuccess?: (response: AxiosResponse<any, any>) => void,
       onError?: (error: { response: { data: any } }) => void
     ) => {
       setLoading(true);
       setError(false);
 
-      let response;
+      let response: AxiosResponse<T, any> | void;
 
       const catchError = (e: any) => {
         setError(e);
@@ -32,7 +32,9 @@ const useAjaxRequest = <T>({
       };
 
       if (typeof instance === "function") {
-        response = await instance(config).catch(catchError);
+        response = await instance<any, AxiosResponse<T, any>>(config).catch(
+          catchError
+        );
       } else {
         throw new Error("Expected instance to be a function, but it's not");
       }
@@ -56,5 +58,15 @@ const useAjaxRequest = <T>({
     sendRequest,
   };
 };
+
+// const { sendRequest } = useAjaxRequest<{ name: string }>({
+//   instance: axios,
+//   options: {},
+// });
+// sendRequest().then((res) => {
+//   if (res) {
+//     res.data
+//   }
+// });
 
 export default useAjaxRequest;

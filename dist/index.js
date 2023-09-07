@@ -49,4 +49,13 @@ const useAjaxRequest = ({ instance, options = {}, }) => {
         sendRequest,
     };
 };
+// const { sendRequest } = useAjaxRequest<{ name: string }>({
+//   instance: axios,
+//   options: {},
+// });
+// sendRequest().then((res) => {
+//   if (res) {
+//     res.data
+//   }
+// });
 exports.default = useAjaxRequest;
