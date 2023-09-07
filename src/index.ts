@@ -10,7 +10,7 @@ const useAjaxRequest = <T>({
 }) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(false);
+  const [error, setError] = useState<any>(false);
   const config = useMemo(() => options, [options]);
   const depInstance = useMemo(() => instance, [instance]);
 
