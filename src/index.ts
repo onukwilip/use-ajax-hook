@@ -1,11 +1,11 @@
-import axios, { AxiosResponse, AxiosStatic } from "axios";
+import axios, { AxiosInstance, AxiosResponse, AxiosStatic } from "axios";
 import { useState, useCallback, useMemo } from "react";
 
 const useAjaxRequest = <T>({
   instance,
   options = {},
 }: {
-  instance: AxiosStatic;
+  instance: AxiosStatic | AxiosInstance;
   options: { url: string; method: string; data?: any; [key: string]: any } | {};
 }) => {
   const [data, setData] = useState<T | null>(null);
