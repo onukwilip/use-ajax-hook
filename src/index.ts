@@ -10,14 +10,19 @@ const useAjaxRequest = <T>({
 }) => {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<any>(false);
+  const [error, setError] = useState<
+    { response: AxiosResponse<T, any>; [key: string]: any } | boolean
+  >(false);
   const config = useMemo(() => options, [options]);
   const depInstance = useMemo(() => instance, [instance]);
 
   const sendRequest = useCallback(
     async (
       onSuccess?: (response: AxiosResponse<T, any>) => void,
-      onError?: (error: AxiosResponse<T, any>) => void
+      onError?: (error: {
+        response: AxiosResponse<T, any>;
+        [key: string]: any;
+      }) => void
     ) => {
       setLoading(true);
       setError(false);
