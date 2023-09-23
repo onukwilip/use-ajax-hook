@@ -43,7 +43,7 @@ const useAjaxRequest = <T>({
     setTimeout(() => {
       setError(undefined);
       setIsError(false);
-    }, 1000 * (options?.resetDataAfterSeconds || 1));
+    }, 1000 * (options?.resetErrorAfterSeconds || 1));
   };
 
   /**
