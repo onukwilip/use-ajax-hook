@@ -13,7 +13,7 @@ const useAjaxRequest = <T>({
 }: {
   instance: AxiosStatic | AxiosInstance;
   config: RawAxiosRequestConfig<any> | {};
-  options: {
+  options?: {
     resetDataOnSend?: boolean;
     resetDataAfterSeconds?: number;
     resetErrorAfterSeconds?: number;
@@ -31,7 +31,7 @@ const useAjaxRequest = <T>({
   const displayAndResetDataAfterSeconds = (data: T) => {
     setData(data);
 
-    setTimeout(() => setData(undefined), options.resetDataAfterSeconds);
+    setTimeout(() => setData(undefined), options?.resetDataAfterSeconds);
   };
   const displayAndResetErrorAfterSeconds = (error: any) => {
     setError(error);
@@ -40,7 +40,7 @@ const useAjaxRequest = <T>({
     setTimeout(() => {
       setError(undefined);
       setIsError(false);
-    }, options.resetDataAfterSeconds);
+    }, options?.resetDataAfterSeconds);
   };
 
   /**
@@ -62,12 +62,12 @@ const useAjaxRequest = <T>({
       setLoading(true);
       setIsError(false);
       setError(undefined);
-      options.resetDataOnSend && setData(undefined);
+      options?.resetDataOnSend && setData(undefined);
 
       let response: AxiosResponse<T, any> | void;
 
       const catchError = (e: any) => {
-        if (options.resetErrorAfterSeconds) {
+        if (options?.resetErrorAfterSeconds) {
           displayAndResetErrorAfterSeconds(e);
         } else {
           setError(e);
@@ -91,7 +91,7 @@ const useAjaxRequest = <T>({
         setLoading(false);
         setIsError(false);
         setError(undefined);
-        if (options.resetDataAfterSeconds)
+        if (options?.resetDataAfterSeconds)
           displayAndResetDataAfterSeconds(response.data);
         else setData(response?.data);
         if (typeof onSuccess === "function") onSuccess(response);
