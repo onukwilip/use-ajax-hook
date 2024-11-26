@@ -6,11 +6,11 @@ import axios, {
 } from "axios";
 import { useState, useCallback, useMemo } from "react";
 
-export type TAxiosError = <T>(error: {
+export type TAxiosError<T> = (error: {
   [key: string]: any;
   response: AxiosResponse<T, any>;
 }) => void;
-export type TAxiosSuccess = <T>(response: AxiosResponse<T, any>) => void;
+export type TAxiosSuccess<T> = (response: AxiosResponse<T, any>) => void;
 
 const useAjaxRequest = <T>({
   instance,
