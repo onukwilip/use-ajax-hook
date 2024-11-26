@@ -6,6 +6,12 @@ import axios, {
 } from "axios";
 import { useState, useCallback, useMemo } from "react";
 
+export type TAxiosError = <T>(error: {
+  [key: string]: any;
+  response: AxiosResponse<T, any>;
+}) => void;
+export type TAxiosSuccess = <T>(response: AxiosResponse<T, any>) => void;
+
 const useAjaxRequest = <T>({
   instance,
   config = {},
@@ -25,8 +31,6 @@ const useAjaxRequest = <T>({
   const [error, setError] = useState<
     { response: AxiosResponse<T, any>; [key: string]: any } | undefined
   >(undefined);
-  // const config = useMemo(() => options, [options]);
-  // const depInstance = useMemo(() => instance, [instance]);
 
   const displayAndResetDataAfterSeconds = (data: T) => {
     setData(data);
@@ -46,6 +50,18 @@ const useAjaxRequest = <T>({
     }, 1000 * (options?.resetErrorAfterSeconds || 1));
   };
 
+  const catchError = (e: any, onError?: TAxiosError) => {
+    if (options?.resetErrorAfterSeconds) {
+      displayAndResetErrorAfterSeconds(e);
+    } else {
+      setError(e);
+      setIsError(true);
+    }
+    setLoading(false);
+    setData(undefined);
+    if (typeof onError === "function") onError(e);
+  };
+
   /**
    * Function responsible for sending the request
    * @param onSuccess The function to be executed if the request was successfull
@@ -54,14 +70,7 @@ const useAjaxRequest = <T>({
    * @returns the response if it was successfull
    */
   const sendRequest = useCallback(
-    async (
-      onSuccess?: (response: AxiosResponse<T, any>) => void,
-      onError?: (error: {
-        response: AxiosResponse<T, any>;
-        [key: string]: any;
-      }) => void,
-      data?: any
-    ) => {
+    async (onSuccess?: TAxiosSuccess, onError?: TAxiosError, data?: any) => {
       setLoading(true);
       setIsError(false);
       setError(undefined);
@@ -69,23 +78,11 @@ const useAjaxRequest = <T>({
 
       let response: AxiosResponse<T, any> | void;
 
-      const catchError = (e: any) => {
-        if (options?.resetErrorAfterSeconds) {
-          displayAndResetErrorAfterSeconds(e);
-        } else {
-          setError(e);
-          setIsError(true);
-        }
-        setLoading(false);
-        setData(undefined);
-        if (typeof onError === "function") onError(e);
-      };
-
       if (typeof instance === "function") {
         response = await instance<any, AxiosResponse<T, any>>({
           ...config,
           ...(data ? { data: data } : {}),
-        }).catch(catchError);
+        }).catch((e: any) => catchError(e, onError));
       } else {
         throw new Error("Expected instance to be a function, but it's not");
       }

@@ -1,6 +1,6 @@
 {
   "name": "use-ajax-request",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "A react hook used to manage http requests and responses in React Js applications",
   "main": "./dist/index.js",
   "scripts": {
