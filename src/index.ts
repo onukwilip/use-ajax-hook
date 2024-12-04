@@ -69,42 +69,41 @@ const useAjaxRequest = <T>({
    * @param data The data to sent alongside the request. If left empty the data passed into the hook (in the config object) is used
    * @returns the response if it was successfull
    */
-  const sendRequest = useCallback(
-    async (
-      onSuccess?: TAxiosSuccess<T>,
-      onError?: TAxiosError<T>,
-      newConfig?: RawAxiosRequestConfig<any>
-    ) => {
-      setLoading(true);
+  const sendRequest = async (
+    onSuccess?: TAxiosSuccess<T>,
+    onError?: TAxiosError<T>,
+    newConfig?: RawAxiosRequestConfig<any>
+  ) => {
+    setLoading(true);
+    setIsError(false);
+    setError(undefined);
+    options?.resetDataOnSend && setData(undefined);
+
+    let response: AxiosResponse<T, any> | void;
+
+    if (typeof instance === "function") {
+      console.log("INSTANCE NEW CONFIG", newConfig);
+      response = await instance<any, AxiosResponse<T, any>>({
+        ...config,
+        ...(newConfig ? newConfig : {}),
+      }).catch((e: any) => catchError(e, onError));
+    } else {
+      throw new Error("Expected instance to be a function, but it's not");
+    }
+
+    if (response) {
+      setLoading(false);
       setIsError(false);
       setError(undefined);
-      options?.resetDataOnSend && setData(undefined);
+      if (options?.resetDataAfterSeconds)
+        displayAndResetDataAfterSeconds(response.data);
+      else setData(response?.data);
+      if (typeof onSuccess === "function") onSuccess(response);
+    }
 
-      let response: AxiosResponse<T, any> | void;
+    return response;
+  };
 
-      if (typeof instance === "function") {
-        response = await instance<any, AxiosResponse<T, any>>({
-          ...config,
-          ...(newConfig || {}),
-        }).catch((e: any) => catchError(e, onError));
-      } else {
-        throw new Error("Expected instance to be a function, but it's not");
-      }
-
-      if (response) {
-        setLoading(false);
-        setIsError(false);
-        setError(undefined);
-        if (options?.resetDataAfterSeconds)
-          displayAndResetDataAfterSeconds(response.data);
-        else setData(response?.data);
-        if (typeof onSuccess === "function") onSuccess(response);
-      }
-
-      return response;
-    },
-    [/* depInstance */ config]
-  );
   /**
    * Function responsible for reseting the response data object
    */
