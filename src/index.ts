@@ -50,7 +50,7 @@ const useAjaxRequest = <T>({
     }, 1000 * (options?.resetErrorAfterSeconds || 1));
   };
 
-  const catchError = (e: any, onError?: TAxiosError) => {
+  const catchError = (e: any, onError?: TAxiosError<T>) => {
     if (options?.resetErrorAfterSeconds) {
       displayAndResetErrorAfterSeconds(e);
     } else {
@@ -70,7 +70,11 @@ const useAjaxRequest = <T>({
    * @returns the response if it was successfull
    */
   const sendRequest = useCallback(
-    async (onSuccess?: TAxiosSuccess, onError?: TAxiosError, data?: any) => {
+    async (
+      onSuccess?: TAxiosSuccess<T>,
+      onError?: TAxiosError<T>,
+      newConfig?: RawAxiosRequestConfig<any>
+    ) => {
       setLoading(true);
       setIsError(false);
       setError(undefined);
@@ -81,7 +85,7 @@ const useAjaxRequest = <T>({
       if (typeof instance === "function") {
         response = await instance<any, AxiosResponse<T, any>>({
           ...config,
-          ...(data ? { data: data } : {}),
+          ...(newConfig || {}),
         }).catch((e: any) => catchError(e, onError));
       } else {
         throw new Error("Expected instance to be a function, but it's not");
