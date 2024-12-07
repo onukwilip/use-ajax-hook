@@ -15,8 +15,6 @@ const useAjaxRequest = ({ instance, config = {}, options, }) => {
     const [loading, setLoading] = (0, react_1.useState)(false);
     const [isError, setIsError] = (0, react_1.useState)(false);
     const [error, setError] = (0, react_1.useState)(undefined);
-    // const config = useMemo(() => options, [options]);
-    // const depInstance = useMemo(() => instance, [instance]);
     const displayAndResetDataAfterSeconds = (data) => {
         setData(data);
         setTimeout(() => setData(undefined), 1000 * ((options === null || options === void 0 ? void 0 : options.resetDataAfterSeconds) || 1));
@@ -29,6 +27,19 @@ const useAjaxRequest = ({ instance, config = {}, options, }) => {
             setIsError(false);
         }, 1000 * ((options === null || options === void 0 ? void 0 : options.resetErrorAfterSeconds) || 1));
     };
+    const catchError = (e, onError) => {
+        if (options === null || options === void 0 ? void 0 : options.resetErrorAfterSeconds) {
+            displayAndResetErrorAfterSeconds(e);
+        }
+        else {
+            setError(e);
+            setIsError(true);
+        }
+        setLoading(false);
+        setData(undefined);
+        if (typeof onError === "function")
+            onError(e);
+    };
     /**
      * Function responsible for sending the request
      * @param onSuccess The function to be executed if the request was successfull
@@ -36,27 +47,15 @@ const useAjaxRequest = ({ instance, config = {}, options, }) => {
      * @param data The data to sent alongside the request. If left empty the data passed into the hook (in the config object) is used
      * @returns the response if it was successfull
      */
-    const sendRequest = (0, react_1.useCallback)((onSuccess, onError, data) => __awaiter(void 0, void 0, void 0, function* () {
+    const sendRequest = (0, react_1.useCallback)((onSuccess, onError, newConfig) => __awaiter(void 0, void 0, void 0, function* () {
         setLoading(true);
         setIsError(false);
         setError(undefined);
         (options === null || options === void 0 ? void 0 : options.resetDataOnSend) && setData(undefined);
         let response;
-        const catchError = (e) => {
-            if (options === null || options === void 0 ? void 0 : options.resetErrorAfterSeconds) {
-                displayAndResetErrorAfterSeconds(e);
-            }
-            else {
-                setError(e);
-                setIsError(true);
-            }
-            setLoading(false);
-            setData(undefined);
-            if (typeof onError === "function")
-                onError(e);
-        };
         if (typeof instance === "function") {
-            response = yield instance(Object.assign(Object.assign({}, config), (data ? { data: data } : {}))).catch(catchError);
+            console.log("INSTANCE NEW CONFIG", newConfig);
+            response = yield instance(Object.assign(Object.assign({}, config), (newConfig ? newConfig : {}))).catch((e) => catchError(e, onError));
         }
         else {
             throw new Error("Expected instance to be a function, but it's not");
@@ -73,7 +72,7 @@ const useAjaxRequest = ({ instance, config = {}, options, }) => {
                 onSuccess(response);
         }
         return response;
-    }), [/* depInstance */ config]);
+    }), [config]);
     /**
      * Function responsible for reseting the response data object
      */
