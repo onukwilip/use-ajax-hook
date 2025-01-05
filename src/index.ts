@@ -83,7 +83,6 @@ const useAjaxRequest = <T>({
       let response: AxiosResponse<T, any> | void;
 
       if (typeof instance === "function") {
-        console.log("INSTANCE NEW CONFIG", newConfig);
         response = await instance<any, AxiosResponse<T, any>>({
           ...config,
           ...(newConfig ? newConfig : {}),
