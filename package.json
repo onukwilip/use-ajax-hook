@@ -1,10 +1,11 @@
 {
   "name": "use-ajax-request",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "description": "A react hook used to manage http requests and responses in React Js applications",
   "main": "./dist/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "upload": "tsc --build && npm publish"
   },
   "repository": {
     "type": "git",

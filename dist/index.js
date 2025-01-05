@@ -54,7 +54,6 @@ const useAjaxRequest = ({ instance, config = {}, options, }) => {
         (options === null || options === void 0 ? void 0 : options.resetDataOnSend) && setData(undefined);
         let response;
         if (typeof instance === "function") {
-            console.log("INSTANCE NEW CONFIG", newConfig);
             response = yield instance(Object.assign(Object.assign({}, config), (newConfig ? newConfig : {}))).catch((e) => catchError(e, onError));
         }
         else {
